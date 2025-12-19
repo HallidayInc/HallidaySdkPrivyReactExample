@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { usePrivy, useWallets } from '@privy-io/react-auth'
 import { openHallidayPayments } from '@halliday-sdk/payments'
 import { connectSigner } from '@halliday-sdk/payments/ethers'

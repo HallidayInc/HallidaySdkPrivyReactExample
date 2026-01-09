@@ -16,7 +16,8 @@ function App() {
 
   const launchHalliday = async () => {
     // Get the embedded wallet (or find the one you want)
-    const wallet = wallets.find(w => w.walletClientType === 'privy');
+    // const wallet = wallets.find(w => w.walletClientType === 'privy');
+    const wallet = wallets[0];
 
     if (!wallet) {
       console.error('No Privy wallet found');
@@ -58,14 +59,15 @@ function App() {
   }
 
   // Find the privy wallet to display address
-  const privyWallet = wallets.find(w => w.walletClientType === 'privy');
+  // const privyWallet = wallets.find(w => w.walletClientType === 'privy');
+  const wallet = wallets[0];
 
   return (
     <div>
       <button onClick={logout}>
         Log out of Privy
       </button>
-      <p>Privy Address: {privyWallet?.address || 'Loading...'}</p>
+      <p>Privy Address: {wallet?.address || 'Loading...'}</p>
       <br />
       <button onClick={launchHalliday}>
         Open Halliday

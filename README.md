@@ -6,7 +6,7 @@ Halliday Payments SDK integration example using a Privy wallet. This project use
 
 Get a Privy app ID: https://www.privy.io/
 
-Get a Halliday API key: https://halliday.xyz/contact
+Get a free Halliday API key now: https://dashboard.halliday.xyz
 
 ### Run
 

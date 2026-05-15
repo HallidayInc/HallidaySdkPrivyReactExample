@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import { usePrivy, useWallets } from '@privy-io/react-auth'
-import { openHallidayPayments } from '@halliday-sdk/payments'
+import { openHallidayPayments, initializeClient } from '@halliday-sdk/payments'
 import { connectSigner } from '@halliday-sdk/payments/ethers'
 import { BrowserProvider } from 'ethers'
 import './App.css'
@@ -13,6 +14,14 @@ function App() {
   const initPrivy = async () => {
     login();
   };
+
+  useEffect(() => {
+    initializeClient({
+      apiKey: HALLIDAY_PUBLIC_API_KEY,
+      onReady: () => { console.log('Preloaded and ready'); },
+      onError: (error) => { console.error(error); },
+    });
+  }, []);
 
   const launchHalliday = async () => {
     const wallet = wallets[0];

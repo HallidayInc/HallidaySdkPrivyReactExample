@@ -15,8 +15,6 @@ function App() {
   };
 
   const launchHalliday = async () => {
-    // Get the embedded wallet (or find the one you want)
-    // const wallet = wallets.find(w => w.walletClientType === 'privy');
     const wallet = wallets[0];
 
     if (!wallet) {
@@ -24,9 +22,7 @@ function App() {
       return;
     }
 
-    // Get the EIP-1193 provider from Privy
     const provider = await wallet.getEthereumProvider();
-    const address = wallet.address;
 
     const connectedSigner = connectSigner(() => {
       return new BrowserProvider(provider).getSigner();
@@ -38,11 +34,8 @@ function App() {
         'base:0x',
         'base:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913'
       ],
-      windowType: 'MODAL',
-      owner: { address, ...connectedSigner },
-      funder: { address, ...connectedSigner }
-    }).catch((error) => {
-      console.log('error.issues', error.issues);
+      userWallet: connectedSigner,
+      funder: connectedSigner,
     });
   };
 

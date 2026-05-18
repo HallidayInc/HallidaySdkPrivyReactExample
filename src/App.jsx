@@ -6,6 +6,10 @@ import { BrowserProvider } from 'ethers'
 import './App.css'
 
 const HALLIDAY_PUBLIC_API_KEY = import.meta.env.VITE_HALLIDAY_API_KEY
+const hallidayOutputs = [
+  'base:0x',
+  'base:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913'
+]
 
 function App() {
   const { ready, authenticated, login, logout } = usePrivy();
@@ -20,6 +24,7 @@ function App() {
       apiKey: HALLIDAY_PUBLIC_API_KEY,
       onReady: () => { console.log('Preloaded and ready'); },
       onError: (error) => { console.error(error); },
+      outputs: hallidayOutputs,
     });
   }, []);
 
@@ -39,10 +44,7 @@ function App() {
 
     openHallidayPayments({
       apiKey: HALLIDAY_PUBLIC_API_KEY,
-      outputs: [
-        'base:0x',
-        'base:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913'
-      ],
+      outputs: hallidayOutputs,
       userWallet: connectedSigner,
       funder: connectedSigner,
     });

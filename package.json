@@ -9,8 +9,12 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "overrides": {
+    "ws": "^8.20.1",
+    "uuid": "^11.1.1"
+  },
   "dependencies": {
-    "@halliday-sdk/payments": "3.1.0",
+    "@halliday-sdk/payments": "^3.2.0",
     "@privy-io/react-auth": "^3.9.0",
     "buffer": "^6.0.3",
     "ethers": "^6.16.0",

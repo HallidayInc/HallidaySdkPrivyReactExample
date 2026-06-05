@@ -1,0 +1,43 @@
+#root {
+  margin: 0 auto;
+  text-align: center;
+}
+
+html,
+body {
+  margin: 0px;
+  padding: 0px;
+  font-family: Arial;
+}
+
+.halliday-container {
+  margin: auto;
+  width: max-content;
+}
+
+button {
+  display: block;
+  margin: 50px auto;
+  background-color: #3df57b;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 5px;
+  padding: 16px 29px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #55f68b;
+}
+
+button:disabled {
+  background-color: #c5c9c6;
+  color: #8a8a8a;
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  background-color: #c5c9c6;
+}

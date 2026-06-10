@@ -39,6 +39,9 @@ function App() {
     withdrawFunder: await getSigner()
   });
 
+  // Note openActivity cannot be properly called until a userWallet, funder or 
+  // owner is provided to initializeClient or openHallidayPayments
+
   return (
     <div className="halliday-container">
       <h1>Halliday SDK Privy Example</h1>

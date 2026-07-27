@@ -1,6 +1,12 @@
 # Halliday SDK Example with Privy Wallet
 
-Halliday Payments SDK integration example using a Privy wallet. This project uses the Vite React template and the Privy React SDK. To connect the Privy wallet to the app, Ethers.js 6 is used with the Privy React SDK.
+Halliday Payments SDK v4 integration example using a Privy embedded wallet. This project uses the Vite React template and the Privy React SDK. To connect the Privy wallet to the app, Ethers.js 6 is used with the Privy React SDK.
+
+The Halliday React SDK (`@halliday-sdk/payments/react`) is used here:
+
+- `<HallidayPaymentsProvider>` in `src/main.jsx` holds the declarative config (API key, deposit and withdrawal assets) and warms the widget on mount.
+- `useHallidayPayments()` in `src/App.jsx` returns `openDeposit`, `openWithdrawal`, `openActivity`, `isReady`, and `updateWallets`.
+- `updateWallets()` pushes the connected Privy wallet in as the payment `owner` and as the deposit/withdrawal funder, using `connectSigner` from `@halliday-sdk/payments/ethers`.
 
 ### Keys
 

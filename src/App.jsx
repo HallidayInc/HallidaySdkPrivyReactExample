@@ -1,64 +1,69 @@
+import { useEffect } from 'react'
 import { usePrivy, useWallets } from '@privy-io/react-auth'
-import { openHallidayPayments, openWithdraw, openActivity, initializeClient } from '@halliday-sdk/payments'
+import { useHallidayPayments } from '@halliday-sdk/payments/react'
 import { connectSigner } from '@halliday-sdk/payments/ethers'
 import { BrowserProvider } from 'ethers'
 
-const HALLIDAY_PUBLIC_API_KEY = import.meta.env.VITE_HALLIDAY_API_KEY
-const hallidayOutputs = [
-  'base:0x',
-  'base:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913'
-]
+function HallidayEventLogger() {
+  const { instance } = useHallidayPayments()
 
-initializeClient({
-  apiKey: HALLIDAY_PUBLIC_API_KEY,
-  onReady: () => console.log('Halliday SDK widget preloaded'),
-  onError: (e) => console.error('Halliday SDK Error:', e),
-  outputs: hallidayOutputs,
-});
+  useEffect(() => {
+    const offStatus = instance.on('status', (s) => console.log(`status: ${s.type}`))
+    const offError = instance.on('error', (e) => console.log(`error (${e.source}): ${e.message}`))
+    const offClose = instance.on('close', () => console.log('widget closed'))
 
-function App() {
-  const { ready, authenticated, login, logout } = usePrivy();
-  const { wallets } = useWallets();
+    return () => {
+      offStatus()
+      offError()
+      offClose()
+    }
+  }, [instance])
 
-  if (!ready) return <p>Loading Privy...</p>;
+  return null
+}
 
-  const wallet = wallets.find(w => w.walletClientType === 'privy');
-  const enabled = authenticated && !!wallet;
+export default function App() {
+  const { ready, authenticated, login, logout } = usePrivy()
+  const { wallets } = useWallets()
+  const { openDeposit, openWithdrawal, openActivity, updateWallets, isReady } =
+    useHallidayPayments()
 
-  const getSigner = async () => {
-    const provider = await wallet.getEthereumProvider();
-    return connectSigner(() => new BrowserProvider(provider).getSigner(wallet.address));
-  };
+  const wallet = wallets.find((w) => w.walletClientType === 'privy')
+  const enabled = authenticated && wallet && isReady
 
-  const launchHalliday = async () => openHallidayPayments({
-    userWallet: await getSigner()
-  });
+  useEffect(() => {
+    if (!wallet) return
 
-  const launchWithdraw = async () => openWithdraw({
-    withdrawInputs: hallidayOutputs,
-    withdrawFunder: await getSigner()
-  });
+    const owner = connectSigner(async () =>
+      new BrowserProvider(await wallet.getEthereumProvider()).getSigner(wallet.address),
+    )
 
-  // Note openActivity cannot be properly called until a userWallet, funder or 
-  // owner is provided to initializeClient or openHallidayPayments
+    updateWallets({
+      owner,
+      deposit: { funders: [owner], destinationAddress: wallet.address },
+      withdrawal: { funder: owner },
+    })
+  }, [wallet, updateWallets])
+
+  if (!ready) return <p>Loading Privy...</p>
 
   return (
     <div className="halliday-container">
+      <HallidayEventLogger />
       <h1>Halliday SDK Privy Example</h1>
       <button onClick={authenticated ? logout : login}>
         {authenticated ? 'Log out of Privy' : 'Sign in with Privy'}
       </button>
-      <button disabled={!enabled} onClick={launchHalliday}>
+      <button disabled={!enabled} onClick={openDeposit}>
         Deposit with Halliday
       </button>
-      <button disabled={!enabled} onClick={launchWithdraw}>
+      <button disabled={!enabled} onClick={openWithdrawal}>
         Withdraw
       </button>
       <button disabled={!enabled} onClick={openActivity}>
         Activity
       </button>
+      {wallet && <span>Privy wallet address: {wallet.address}</span>}
     </div>
-  );
+  )
 }
-
-export default App
